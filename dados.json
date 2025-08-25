@@ -1,0 +1,50 @@
+[
+    {
+        "codigo": "16844",
+        "carro": "PALIO 1.4 8V FIRE FLEX - 2009-2011",
+        "ano": "",
+        "motor": "",
+        "comentarios": "Coletor com Catalisador e 2 Sondas",
+        "foto": "https://s3.sa-east-1.amazonaws.com/tuper-esc-prd/versions/image/PALIO_1.4_8V_FIRE_FLEX_2009_2011.jpg"
+    },
+    {
+        "codigo": "11828",
+        "carro": "PALIO 1.4 8V FIRE FLEX - 2009-2011",
+        "ano": "",
+        "motor": "",
+        "comentarios": "Tubo Intermediário Anterior com Flexível",
+        "foto": "https://s3.sa-east-1.amazonaws.com/tuper-esc-prd/versions/image/PALIO_1.4_8V_FIRE_FLEX_2009_2011.jpg"
+    },
+    {
+        "codigo": "19480",
+        "carro": "PALIO 1.4 8V FIRE FLEX - 2009-2011",
+        "ano": "",
+        "motor": "",
+        "comentarios": "Flexível",
+        "foto": "https://s3.sa-east-1.amazonaws.com/tuper-esc-prd/versions/image/PALIO_1.4_8V_FIRE_FLEX_2009_2011.jpg"
+    },
+    {
+        "codigo": "11547",
+        "carro": "PALIO 1.4 8V FIRE FLEX - 2009-2011",
+        "ano": "",
+        "motor": "",
+        "comentarios": "Silencioso Intermediário",
+        "foto": "https://s3.sa-east-1.amazonaws.com/tuper-esc-prd/versions/image/PALIO_1.4_8V_FIRE_FLEX_2009_2011.jpg"
+    },
+    {
+        "codigo": "11548",
+        "carro": "PALIO 1.4 8V FIRE FLEX - 2009-2011",
+        "ano": "",
+        "motor": "",
+        "comentarios": "Silencioso Traseiro",
+        "foto": "https://s3.sa-east-1.amazonaws.com/tuper-esc-prd/versions/image/PALIO_1.4_8V_FIRE_FLEX_2009_2011.jpg"
+    },
+    {
+        "codigo": "11612",
+        "carro": "PALIO 1.4 8V FIRE FLEX - 2009-2011",
+        "ano": "",
+        "motor": "",
+        "comentarios": "Silencioso Traseiro Esportivo",
+        "foto": "https://s3.sa-east-1.amazonaws.com/tuper-esc-prd/versions/image/PALIO_1.4_8V_FIRE_FLEX_2009_2011.jpg"
+    }
+]

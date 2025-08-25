@@ -1,50 +1,90 @@
-# main.py - VERSÃO CORRIGIDA
+# main.py (VERSÃO FINAL COM CAMPO "TIPO")
 
-# 1. Nossos dados (no futuro, isso virá de um arquivo JSON)
-banco_de_dados = [
-    {
-        "codigo": "VW01-T",
-        "carro": "Gol G5",
-        "ano": "2008-2012",
-        "motor": "1.0",
-        "comentarios": "Silencioso traseiro. Peça similar ao do Fox, mas o suporte é diferente.",
-        "foto": "vw01-t.jpg"
-    },
-    {
-        "codigo": "FI05-I",
-        "carro": "Palio Fire",
-        "ano": "2002-2007",
-        "motor": "1.0 8v",
-        "comentarios": "Tubo intermediário. Atenção para a versão com ou sem catalisador no coletor.",
-        "foto": "fi05-i.jpg"
-    }
-]
+import json
+from scraper import extrair_dados_tuper
 
-# 2. Nossa função de busca (NÃO PRECISA MUDAR NADA AQUI, ELA JÁ ESTÁ CORRETA)
-def buscar_peca_por_carro(modelo_carro):
-    """Busca todas as peças que correspondem ao modelo de carro informado."""
-    print(f"\nBuscando peças para: {modelo_carro}...")
+# ... (funções carregar_dados e salvar_dados continuam iguais) ...
+def carregar_dados():
+    try:
+        with open('dados.json', 'r', encoding='utf-8') as f: return json.load(f)
+    except FileNotFoundError: return []
+def salvar_dados(dados):
+    with open('dados.json', 'w', encoding='utf-8') as f: json.dump(dados, f, indent=4, ensure_ascii=False)
+
+def buscar_peca(banco_de_dados, termo_busca):
+    palavras_chave = termo_busca.lower().split()
+    print(f"\nBuscando por peças que contenham TODAS as palavras: {palavras_chave}...")
     resultados = []
-    for peca in banco_de_dados:
-        if modelo_carro.lower() in peca["carro"].lower():
-            resultados.append(peca)
     
+    for peca in banco_de_dados:
+        # Adicionamos o campo 'tipo' à nossa busca!
+        texto_pesquisavel = f"{peca.get('codigo', '')} {peca.get('carro', '')} {peca.get('comentarios', '')} {peca.get('tipo', '')}".lower()
+        
+        if all(palavra in texto_pesquisavel for palavra in palavras_chave):
+            resultados.append(peca)
+            
     return resultados
 
-# 3. Usando o programa (AQUI ESTÁ A MUDANÇA)
+def adicionar_peca(banco_de_dados):
+    print("\n--- Adicionando Nova Peça Manualmente ---")
+    # Pedimos o novo campo ao usuário
+    tipo = input("Tipo da peça (ex: Silencioso Traseiro): ")
+    codigo = input("Código da peça: ")
+    carro = input("Modelo do carro: ")
+    comentarios = input("Comentários/macetes: ")
+    foto = input("URL ou nome do arquivo da foto: ")
 
-# Primeiro, pedimos a informação ao usuário E GUARDAMOS na variável 'termo_de_busca'
-termo_de_busca = input("Digite o modelo do carro que deseja buscar: ")
+    nova_peca = {
+        "codigo": codigo, "carro": carro, "tipo": tipo,
+        "comentarios": comentarios, "foto": foto
+    }
+    banco_de_dados.append(nova_peca)
+    salvar_dados(banco_de_dados)
+    print("Peça adicionada com sucesso!")
 
-# Agora, usamos a VARIÁVEL com a resposta do usuário para chamar a função
-resultados_da_busca = buscar_peca_por_carro(termo_de_busca)
+# --- Início do Programa Principal (Menu) ---
+banco_de_dados = carregar_dados()
 
-# O resto do código para mostrar o resultado continua igual
-if resultados_da_busca:
-    for peca in resultados_da_busca:
-        print("---")
-        print(f"Código: {peca['codigo']}")
-        print(f"Aplicação: {peca['carro']} ano {peca['ano']}")
-        print(f"Comentários: {peca['comentarios']}")
-else:
-    print("Nenhuma peça encontrada para o termo digitado.")
+while True:
+    # ... (o menu continua o mesmo) ...
+    print("\n--- Catálogo Inteligente de Escapamentos ---")
+    print("1. Buscar Peça")
+    print("2. Adicionar Peça Manualmente")
+    print("3. Importar Peças da Tuper (via URL)")
+    print("4. Sair")
+    escolha = input("Escolha uma opção: ")
+
+    if escolha == '1':
+        termo_de_busca = input("Digite o que deseja buscar (ex: silencioso traseiro palio): ")
+        resultados_da_busca = buscar_peca(banco_de_dados, termo_de_busca)
+
+        if resultados_da_busca:
+            print(f"\n--- {len(resultados_da_busca)} resultado(s) encontrado(s) ---")
+            for peca in resultados_da_busca:
+                # Exibimos o novo campo 'tipo' para clareza
+                print(f"Tipo: {peca.get('tipo', 'N/A')}")
+                print(f"Código: {peca.get('codigo', 'N/A')}")
+                print(f"Aplicação: {peca.get('carro', 'N/A')}")
+                print(f"Comentários: {peca.get('comentarios', 'N/A')}")
+                if peca.get('foto'):
+                    print(f"Foto: {peca['foto']}")
+                print("-" * 20)
+        else:
+            print("Nenhuma peça encontrada para os termos digitados.")
+    
+    # ... (as outras opções do menu continuam iguais) ...
+    elif escolha == '2': adicionar_peca(banco_de_dados)
+    elif escolha == '3':
+        url = input("Cole a URL do produto no site da Tuper: ")
+        novas_pecas = extrair_dados_tuper(url)
+        if novas_pecas:
+            banco_de_dados.extend(novas_pecas)
+            salvar_dados(banco_de_dados)
+            print(f"\nSucesso! {len(novas_pecas)} novas peças foram importadas e salvas.")
+        else:
+            print("\nNenhuma peça foi importada.")
+    elif escolha == '4':
+        print("Saindo do programa. Até mais!")
+        break
+    else:
+        print("Opção inválida.")
